@@ -29,7 +29,7 @@ Building:
 
 ```go
 // Setup a Source object
-source, _ = hbuild.NewSource(apiKey, appName, sourceDir)
+source, _ := hbuild.NewSource(apiKey, appName, sourceDir)
 
 // Create a compressed targz of the source
 source.Compress()
@@ -38,7 +38,7 @@ source.Compress()
 source.Upload()
 
 // Run a build
-hbuild.Build{}.Run(apiKey, appName, source)
+build, _ := hbuild.NewBuild(apiKey, appName, source)
 
 // Watch the build output
 io.Copy(os.Stdout, build.Output)
