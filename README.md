@@ -28,7 +28,7 @@ Usage of hbuild:
   -app="": -app=exampleapp
   -key="12345678-1234-5678-1234-567812345678": -key=123ABC
   -source="/home/user/code/exampleapp": -source=/path/to/src
-$ hbuild -app=naaman-iter
+$ hbuild -app=exampleapp
 Creating source...done.
 Compressing source...done.
 Uploading source...done.
