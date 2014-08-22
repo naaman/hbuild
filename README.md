@@ -7,6 +7,12 @@ Deploy an app to Heroku without using git.
 `hbuild` is a utility for deploying an app to Heroku using its 
 `builds` API instead of `git push heroku master`.
 
+## Install
+
+```sh
+$ go get github.com/naaman/hbuild/cmd/hbuild
+```
+
 ## Command Usage
 
 ```sh
