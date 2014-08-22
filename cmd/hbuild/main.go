@@ -55,7 +55,7 @@ func main() {
 	fmt.Println("done.")
 
 	fmt.Println("Building:")
-	err = build.Run(*fApiKey, *fAppName, source)
+	build, err = hbuild.NewBuild(*fApiKey, *fAppName, source)
 	if err != nil {
 		fmt.Println(err)
 		return

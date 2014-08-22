@@ -18,19 +18,22 @@ type BuildRequestJSON struct {
 	} `json:"source_blob"`
 }
 
-func (b *Build) Run(token, app string, source Source) (err error) {
+func NewBuild(token, app string, source Source) (build Build, err error) {
 	buildJson := BuildRequestJSON{}
 	buildJson.SourceBlob.Url = source.Get.String()
 
 	client := newHerokuClient(token)
-	client.request(buildRequest(app, buildJson), &b)
-
-	stream, err := http.DefaultClient.Get(b.OutputStreamURL)
+	err = client.request(buildRequest(app, buildJson), &build)
 	if err != nil {
 		return
 	}
 
-	b.Output = stream.Body
+	stream, err := http.DefaultClient.Get(build.OutputStreamURL)
+	if err != nil {
+		return
+	}
+
+	build.Output = stream.Body
 	return
 }
 
