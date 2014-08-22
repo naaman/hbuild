@@ -52,3 +52,9 @@ io.Copy(os.Stdout, build.Output)
 
 Note: see the [hbuild command source](https://github.com/naaman/hbuild/blob/master/cmd/hbuild/main.go)
 for slightly more detail.
+
+## TODO
+
+* Tests
+* Pipeline Compress and Upload
+* Infer the app name from .git/config
