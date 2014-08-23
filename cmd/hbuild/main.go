@@ -1,19 +1,23 @@
 package main
 
 import (
+	"bufio"
 	"code.google.com/p/go-netrc/netrc"
 	"flag"
 	"fmt"
 	"github.com/naaman/hbuild"
 	"io"
 	"os"
+	"os/exec"
 	"os/user"
+	"strings"
+	"bytes"
 )
 
 var (
 	workDir, _ = os.Getwd()
 	fDir       = flag.String("source", workDir, "-source=/path/to/src")
-	fAppName   = flag.String("app", "", "-app=exampleapp")
+	fAppName   = flag.String("app", appName(), "-app=exampleapp")
 	fApiKey    = flag.String("key", netrcApiKey(), "-key=123ABC")
 )
 
@@ -74,5 +78,28 @@ func netrcApiKey() string {
 			}
 		}
 	}
+	return ""
+}
+
+func appName() string {
+	gitConfigCmd := exec.Command("git", "config", "--list")
+	gitConfig, err := gitConfigCmd.CombinedOutput()
+	if err != nil {
+		return ""
+	}
+
+	gitConfigScanner := bufio.NewScanner(bytes.NewBuffer(gitConfig))
+	gitConfigScanner.Split(bufio.ScanLines)
+
+	for gitConfigScanner.Scan() {
+		gitConfigLine := gitConfigScanner.Text()
+		if strings.HasPrefix(gitConfigLine, "remote.heroku.url") {
+			l := strings.TrimSuffix(gitConfigLine, ".git")
+			i := strings.LastIndex(l, ":") + 1
+
+			return l[i:]
+		}
+	}
+
 	return ""
 }
