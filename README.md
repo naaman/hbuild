@@ -64,4 +64,3 @@ for slightly more detail.
 
 * Tests
 * Pipeline Compress and Upload
-* Infer the app name from .git/config
