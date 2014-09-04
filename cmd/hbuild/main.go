@@ -12,6 +12,8 @@ import (
 	"os/user"
 	"strings"
 	"bytes"
+	"time"
+	"log"
 )
 
 var (
@@ -58,7 +60,7 @@ func main() {
 	}
 	fmt.Println("done.")
 
-	fmt.Println("Building:")
+	fmt.Println("Building...")
 	build, err = hbuild.NewBuild(*fApiKey, *fAppName, source)
 	if err != nil {
 		fmt.Println(err)
@@ -66,6 +68,21 @@ func main() {
 	}
 
 	io.Copy(os.Stdout, build.Output)
+
+	for {
+		s, err := build.Status()
+		if err != nil {
+			log.Println(err)
+		}
+
+		if s == "pending" {
+			fmt.Print(".")
+			time.Sleep(time.Second)
+		} else {
+			fmt.Println("..done.")
+			return
+		}
+	}
 }
 
 func netrcApiKey() string {
