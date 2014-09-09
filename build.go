@@ -6,17 +6,17 @@ import (
 )
 
 type Build struct {
-	Id              UUID
-	Output          io.Reader
-	status					string
-	token						string
-	app         		string
+	Id     UUID
+	Output io.Reader
+	status string
+	token  string
+	app    string
 }
 
 type BuildResponseJSON struct {
 	Id              string `json:"id"`
 	OutputStreamURL string `json:"output_stream_url"`
-	Status					string `json:"status"`
+	Status          string `json:"status"`
 }
 
 type BuildRequestJSON struct {
