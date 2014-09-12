@@ -26,13 +26,19 @@ type BuildRequestJSON struct {
 	} `json:"source_blob"`
 }
 
-func NewBuild(token, app string, source Source) (build Build, err error) {
+type BuildOptions struct {
+	SourceVersion     string
+	AdditionalHeaders http.Header
+}
+
+func NewBuild(token, app string, source Source, opts BuildOptions) (build Build, err error) {
 	buildReqJson := BuildRequestJSON{}
 	buildReqJson.SourceBlob.Url = source.Get.String()
+	buildReqJson.SourceBlob.Version = opts.SourceVersion
 
 	client := newHerokuClient(token)
 	buildResJson := BuildResponseJSON{}
-	err = client.request(buildRequest(app, buildReqJson), &buildResJson)
+	err = client.request(buildRequest(app, buildReqJson, opts.AdditionalHeaders), &buildResJson)
 	if err != nil {
 		return
 	}
@@ -61,10 +67,10 @@ func (b *Build) Status() (string, error) {
 	return buildJson.Status, nil
 }
 
-func buildRequest(app string, build BuildRequestJSON) herokuRequest {
-	return herokuRequest{"POST", "/apps/" + app + "/builds", build}
+func buildRequest(app string, build BuildRequestJSON, additionalHeaders http.Header) herokuRequest {
+	return herokuRequest{"POST", "/apps/" + app + "/builds", build, additionalHeaders}
 }
 
 func buildStatusRequest(build Build) herokuRequest {
-	return herokuRequest{"GET", "/apps/" + build.app + "/builds/" + string(build.Id), nil}
+	return herokuRequest{"GET", "/apps/" + build.app + "/builds/" + string(build.Id), nil, http.Header{}}
 }

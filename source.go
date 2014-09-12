@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"io"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -53,7 +54,7 @@ func NewSource(token, app, dir string) (source Source, err error) {
 }
 
 func sourceRequest(app string) herokuRequest {
-	return herokuRequest{"POST", "/apps/" + app + "/sources", nil}
+	return herokuRequest{"POST", "/apps/" + app + "/sources", nil, http.Header{}}
 }
 
 func (s *Source) Compress() (err error) {

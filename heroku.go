@@ -18,9 +18,10 @@ type herokuClient struct {
 }
 
 type herokuRequest struct {
-	method string
-	path   string
-	body   interface{}
+	method            string
+	path              string
+	body              interface{}
+	additionalHeaders http.Header
 }
 
 func newHerokuClient(token string) herokuClient {
@@ -57,6 +58,9 @@ func (hc herokuClient) request(hrequest herokuRequest, v interface{}) (err error
 	request.Header.Set("User-Agent", hc.userAgent)
 	if hrequest.body != nil {
 		request.Header.Set("Content-Type", "application/json")
+	}
+	for k, v := range hrequest.additionalHeaders {
+		request.Header[k] = v
 	}
 
 	response, err := hc.httpClient.Do(request)
