@@ -68,8 +68,12 @@ func (s *Source) Upload() (err error) {
 
 func targzWalk(dirPath string, tw *tar.Writer) error {
 	var walkfunc filepath.WalkFunc
+	prefixPath := filepath.Clean(dirPath) + "/"
 
 	walkfunc = func(path string, fi os.FileInfo, err error) error {
+		// turn the absolute path into a relative path
+		path = strings.TrimPrefix(path, prefixPath)
+
 		// ignore the .git dir
 		if strings.HasPrefix(path, ".git/") {
 			return nil
@@ -116,14 +120,6 @@ func targzWalk(dirPath string, tw *tar.Writer) error {
 }
 
 func tarGz(inPath string) (tarArchive *os.File, err error) {
-	wd, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
-	os.Chdir(inPath)
-	defer os.Chdir(wd)
-
 	// file write
 	tempSource, err := ioutil.TempFile("", "source")
 	if err != nil {
@@ -143,7 +139,7 @@ func tarGz(inPath string) (tarArchive *os.File, err error) {
 	tw := tar.NewWriter(gw)
 	defer tw.Close()
 
-	err = targzWalk(".", tw)
+	err = targzWalk(inPath, tw)
 
 	return
 }
