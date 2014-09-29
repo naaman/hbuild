@@ -1,19 +1,16 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
-	"code.google.com/p/go-netrc/netrc"
 	"flag"
 	"fmt"
-	"github.com/naaman/hbuild"
 	"io"
 	"log"
 	"os"
-	"os/exec"
 	"os/user"
-	"strings"
 	"time"
+
+	"code.google.com/p/go-netrc/netrc"
+	"github.com/naaman/hbuild"
 )
 
 var (
