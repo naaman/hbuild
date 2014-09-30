@@ -72,6 +72,10 @@ func (hc herokuClient) request(hrequest herokuRequest, v interface{}) (err error
 		if err != nil {
 			return err
 		}
+		// Patch the really crappy way api.h.c handles json escaping in
+		// non-production environments.
+		// TODO: get api.h.c to behave correctly in non-prod environments
+		requestJson = []byte(strings.Replace(string(requestJson), "\\u0026", "&", -1))
 		requestBody = bytes.NewReader(requestJson)
 	}
 
