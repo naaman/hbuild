@@ -42,9 +42,19 @@ type herokuRequest struct {
 }
 
 func newHerokuClient(token string) herokuClient {
-	herokuUrl, _ := url.Parse("https://api.heroku.com")
+	herokuHost := "https://api.heroku.com"
+	if hh := os.Getenv("HEROKU_API_URL"); hh != "" {
+		herokuHost = hh
+	}
+
+	transport := http.DefaultTransport
+	if strings.Contains(herokuHost, "herokudev") {
+		transport = unverifiedSSLTransport
+	}
+
+	herokuUrl, _ := url.Parse(herokuHost)
 	return herokuClient{
-		httpClient: http.DefaultClient,
+		httpClient: &http.Client{Transport: transport},
 		token:      token,
 		url:        herokuUrl,
 		version:    "application/vnd.heroku+json; version=edge",
