@@ -2,12 +2,29 @@ package hbuild
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
+	"os"
+	"strings"
+	"time"
 )
+
+// unverifiedSSLTransport is a transport that mirrors http.DefaultTransport
+// and skips SSL verification.
+var unverifiedSSLTransport http.RoundTripper = &http.Transport{
+	Proxy: http.ProxyFromEnvironment,
+	Dial: (&net.Dialer{
+		Timeout:   30 * time.Second,
+		KeepAlive: 30 * time.Second,
+	}).Dial,
+	TLSHandshakeTimeout: 10 * time.Second,
+	TLSClientConfig:     &tls.Config{InsecureSkipVerify: true},
+}
 
 type herokuClient struct {
 	httpClient *http.Client
