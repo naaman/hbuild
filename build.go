@@ -81,7 +81,7 @@ func (b *Build) Result() (*BuildResultJSON, error) {
 
         err := client.request(buildResultRequest(*b), &result)
         if err != nil {
-                return "", err
+                return result, err
         }
         return result, nil
 }
