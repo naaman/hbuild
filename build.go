@@ -27,11 +27,11 @@ type BuildRequestJSON struct {
 }
 
 type BuildResultJSON struct {
-        Build struct {
-                Id     string `json:"id"`
-                Status string `json:"status"`
-        } `json:"build"`
-        Lines []map[string]string `json:"lines"`
+	Build struct {
+		Id     string `json:"id"`
+		Status string `json:"status"`
+	} `json:"build"`
+	Lines []map[string]string `json:"lines"`
 }
 
 type BuildOptions struct {
@@ -75,15 +75,15 @@ func (b *Build) Status() (string, error) {
 	return buildJson.Status, nil
 }
 
-func (b *Build) Result() (*BuildResultJSON, error) {
-        result := new(BuildResultJSON)
-        client := newHerokuClient(b.token)
+func (b *Build) Result() (BuildResultJSON, error) {
+	result := BuildResultJSON{}
+	client := newHerokuClient(b.token)
 
-        err := client.request(buildResultRequest(*b), &result)
-        if err != nil {
-                return result, err
-        }
-        return result, nil
+	err := client.request(buildResultRequest(*b), &result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }
 
 func buildRequest(app string, build BuildRequestJSON, additionalHeaders http.Header) herokuRequest {
@@ -95,5 +95,5 @@ func buildStatusRequest(build Build) herokuRequest {
 }
 
 func buildResultRequest(build Build) herokuRequest {
-        return herokuRequest{"GET", "/apps/" + build.app + "/builds/" + string(build.Id) + "/result", nil, http.Header{}}
+	return herokuRequest{"GET", "/apps/" + build.app + "/builds/" + string(build.Id) + "/result", nil, http.Header{}}
 }
