@@ -7,7 +7,7 @@ import (
 
 type Build struct {
 	Id     UUID
-	Output io.Reader
+	Output io.ReadCloser
 	status string
 	token  string
 	app    string
