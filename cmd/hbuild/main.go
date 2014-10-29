@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-        "github.com/heroku/hbuild"
+	"github.com/naaman/hbuild"
 )
 
 var (
