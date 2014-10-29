@@ -31,7 +31,8 @@ type BuildResultJSON struct {
 		Id     string `json:"id"`
 		Status string `json:"status"`
 	} `json:"build"`
-	Lines []map[string]string `json:"lines"`
+	ExitCode int                 `json:"exit_code"`
+	Lines    []map[string]string `json:"lines"`
 }
 
 type BuildOptions struct {
