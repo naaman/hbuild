@@ -43,14 +43,15 @@ func NewBuild(token, app string, source Source, opts BuildOptions) (build Build,
 		return
 	}
 
+	build.Id = UUID(buildResJson.Id)
+	build.token = token
+	build.app = app
+
 	stream, err := http.DefaultClient.Get(buildResJson.OutputStreamURL)
 	if err != nil {
 		return
 	}
 
-	build.Id = UUID(buildResJson.Id)
-	build.token = token
-	build.app = app
 	build.Output = stream.Body
 	return
 }
