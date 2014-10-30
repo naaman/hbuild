@@ -1,13 +1,12 @@
 package hbuild
 
 import (
-	"io"
 	"net/http"
 )
 
 type Build struct {
 	Id     UUID
-	Output io.ReadCloser
+	Stream *http.Response
 	status string
 	token  string
 	app    string
@@ -61,7 +60,7 @@ func NewBuild(token, app string, source Source, opts BuildOptions) (build Build,
 		return
 	}
 
-	build.Output = stream.Body
+	build.Stream = stream
 	return
 }
 
