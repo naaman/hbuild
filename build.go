@@ -26,6 +26,15 @@ type BuildRequestJSON struct {
 	} `json:"source_blob"`
 }
 
+type BuildResultJSON struct {
+	Build struct {
+		Id     string `json:"id"`
+		Status string `json:"status"`
+	} `json:"build"`
+	ExitCode int                 `json:"exit_code"`
+	Lines    []map[string]string `json:"lines"`
+}
+
 type BuildOptions struct {
 	SourceVersion     string
 	AdditionalHeaders http.Header
@@ -67,10 +76,25 @@ func (b *Build) Status() (string, error) {
 	return buildJson.Status, nil
 }
 
+func (b *Build) Result() (BuildResultJSON, error) {
+	result := BuildResultJSON{}
+	client := newHerokuClient(b.token)
+
+	err := client.request(buildResultRequest(*b), &result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
 func buildRequest(app string, build BuildRequestJSON, additionalHeaders http.Header) herokuRequest {
 	return herokuRequest{"POST", "/apps/" + app + "/builds", build, additionalHeaders}
 }
 
 func buildStatusRequest(build Build) herokuRequest {
 	return herokuRequest{"GET", "/apps/" + build.app + "/builds/" + string(build.Id), nil, http.Header{}}
+}
+
+func buildResultRequest(build Build) herokuRequest {
+	return herokuRequest{"GET", "/apps/" + build.app + "/builds/" + string(build.Id) + "/result", nil, http.Header{}}
 }
