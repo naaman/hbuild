@@ -16,6 +16,7 @@ func uploadFile(putUrl string, file *os.File) (err error) {
 	if err != nil {
 		return
 	}
+	defer openFile.Close()
 
 	req, err := http.NewRequest("PUT", putUrl, openFile)
 	if err != nil {
