@@ -98,6 +98,7 @@ func (hc herokuClient) request(hrequest herokuRequest, v interface{}) (err error
 	if err != nil {
 		return
 	}
+	defer response.Body.Close()
 
 	if response.StatusCode/100 != 2 {
 		var herr HerokuJsonError
