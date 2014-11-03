@@ -64,7 +64,7 @@ func main() {
 		return
 	}
 
-	io.Copy(os.Stdout, build.Output)
+	io.Copy(os.Stdout, build.Stream.Body)
 
 	for {
 		s, err := build.Status()
