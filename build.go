@@ -2,6 +2,7 @@ package hbuild
 
 import (
 	"net/http"
+	"strings"
 )
 
 type Build struct {
@@ -55,7 +56,13 @@ func NewBuild(token, app string, source Source, opts BuildOptions) (build Build,
 	build.token = token
 	build.app = app
 
-	stream, err := http.DefaultClient.Get(buildResJson.OutputStreamURL)
+	transport := http.DefaultTransport
+	if strings.Contains(buildResJson.OutputStreamURL, "herokudev") {
+		transport = unverifiedSSLTransport
+	}
+	streamingClient := &http.Client{Transport: transport}
+
+	stream, err := streamingClient.Get(buildResJson.OutputStreamURL)
 	if err != nil {
 		return
 	}
