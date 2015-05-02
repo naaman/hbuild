@@ -9,6 +9,13 @@ Deploy an app to Heroku without using git.
 
 ## Install
 
+### Binary Downloads
+
+* [Linux](https://godist.herokuapp.com/projects/naaman/hbuild/releases/current/linux-amd64/hbuild)
+* [OSX](https://godist.herokuapp.com/projects/naaman/hbuild/releases/current/darwin-amd64/hbuild)
+* [Windows](https://godist.herokuapp.com/projects/naaman/hbuild/releases/current/windows-amd64/hbuild.exe)
+
+### Compile from Source
 ```sh
 $ go get github.com/naaman/hbuild/cmd/hbuild
 ```
